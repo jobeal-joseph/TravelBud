@@ -2,78 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TravelBud | Budget</title>
+    <title>Budget Tracker | TravelBud</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { background-color: #f8fafc; }
-        .glass-card {
-            background: white;
-            border-radius: 25px;
-            border: 1px solid rgba(255,255,255,0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-        }
-        .stat-badge {
-            background: #eef2ff;
-            color: #4f46e5;
-            padding: 10px 20px;
-            border-radius: 15px;
-            font-weight: 700;
-        }
-        .form-control, .form-select {
-            border-radius: 12px;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-        }
+        .glass-card { background: white; border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .total-badge { background: #000; color: #fff; padding: 15px; border-radius: 12px; display: inline-block; }
     </style>
 </head>
-<body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="/dashboard">TravelBud</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/search">City Search</a>
-                <a class="nav-link active" href="/budget">Budget Tracker</a>
-            </div>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold m-0" id="trip-title">Budget Manager</h2>
+            <a href="/search" class="btn btn-dark rounded-pill px-4">New Search</a>
         </div>
-    </nav>
-
-    <div class="container py-3">
         <div class="row g-4">
-            <div class="col-lg-4">
-                <div class="glass-card p-4 h-100">
-                    <h4 class="fw-bold mb-4">New Expense</h4>
-                    <div class="mb-3">
-                        <label class="small text-muted fw-bold">CATEGORY</label>
-                        <select id="cat" class="form-select">
-                            <option>Food & Dining</option>
-                            <option>Transport</option>
-                            <option>Accommodation</option>
-                            <option>Activities</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="small text-muted fw-bold">DESCRIPTION</label>
-                        <input type="text" id="desc" class="form-control" placeholder="Flight, Lunch, etc.">
-                    </div>
-                    <div class="mb-4">
-                        <label class="small text-muted fw-bold">AMOUNT ($)</label>
-                        <input type="number" id="amt" class="form-control" placeholder="0.00">
-                    </div>
-                    <button class="btn btn-dark w-100 py-3 rounded-4 fw-bold" onclick="addMoney()">Add to Total</button>
+            <div class="col-md-4">
+                <div class="card glass-card p-4">
+                    <h5 class="fw-bold mb-4">Add Expense</h5>
+                    <label class="small fw-bold text-muted">CATEGORY</label>
+                    <select id="cat" class="form-select mb-3 border-0 bg-light">
+                        <option>Food</option>
+                        <option>Stay</option>
+                        <option>Transport</option>
+                        <option>Fun</option>
+                    </select>
+                    <label class="small fw-bold text-muted">DESCRIPTION</label>
+                    <input type="text" id="desc" class="form-control mb-3 border-0 bg-light" placeholder="e.g. Lunch">
+                    <label class="small fw-bold text-muted">AMOUNT ($)</label>
+                    <input type="number" id="amt" class="form-control mb-4 border-0 bg-light" placeholder="0.00">
+                    <button class="btn btn-primary w-100 py-3 fw-bold rounded-3" onclick="addExp()">Save Expense</button>
                 </div>
             </div>
-
-            <div class="col-lg-8">
-                <div class="glass-card p-4 h-100">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="fw-bold m-0">Spending Insights</h4>
-                        <div class="stat-badge">Total: $<span id="total-val">0</span></div>
-                    </div>
-                    <div style="max-height: 400px;" class="d-flex justify-content-center">
-                        <canvas id="budgetChart"></canvas>
+            <div class="col-md-8 text-center">
+                <div class="card glass-card p-4 h-100">
+                    <div class="total-badge mb-4"><h4>Total: $<span id="total-val">0</span></h4></div>
+                    <div style="max-height: 350px;" class="d-flex justify-content-center">
+                        <canvas id="chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -82,44 +47,75 @@
 
     <script>
         let chart;
-        async function addMoney() {
-            const amount = document.getElementById('amt').value;
-            if(!amount) return alert("Enter amount");
-            await fetch('/api/budget/add', {
+        
+        // 1. Get data from localStorage
+        const tripId = localStorage.getItem('trip_id');
+        const cityName = localStorage.getItem('city_name');
+
+        // 2. Redirect if user hasn't searched a city first (Safety Check)
+        if (!tripId || tripId === "null") {
+            alert("Please select a city first!");
+            window.location.href = '/search';
+        }
+
+        // 3. Set the title to the city name
+        document.getElementById('trip-title').innerText = `Budget for ${cityName}`;
+
+        async function addExp() {
+            const amtInput = document.getElementById('amt');
+            const descInput = document.getElementById('desc');
+            const catInput = document.getElementById('cat');
+
+            if(!amtInput.value) return alert("Please enter an amount");
+
+            // 4. Post data with current tripId
+            const response = await fetch('/api/budget/add', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    category: document.getElementById('cat').value,
-                    description: document.getElementById('desc').value,
-                    amount: amount
+                    trip_id: tripId,
+                    category: catInput.value,
+                    description: descInput.value,
+                    amount: amtInput.value
                 })
             });
-            document.getElementById('amt').value = '';
-            document.getElementById('desc').value = '';
-            updateUI();
+
+            if(response.ok) {
+                amtInput.value = '';
+                descInput.value = '';
+                updateUI(); 
+            } else {
+                alert("Error saving expense. Try resetting the database.");
+            }
         }
 
         async function updateUI() {
-            const res = await fetch('/api/budget/summary');
+            // 5. Fetch summary specifically for this trip
+            const res = await fetch(`/api/budget/summary?trip_id=${tripId}`);
             const data = await res.json();
-            document.getElementById('total-val').innerText = data.total;
-            const ctx = document.getElementById('budgetChart').getContext('2d');
+            
+            document.getElementById('total-val').innerText = data.total || 0;
+
+            const ctx = document.getElementById('chart').getContext('2d');
             if(chart) chart.destroy();
-            chart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(data.breakdown),
-                    datasets: [{
-                        data: Object.values(data.breakdown),
-                        backgroundColor: ['#6366f1', '#f59e0b', '#10b981', '#ef4444'],
-                        borderWidth: 0,
-                        hoverOffset: 15
-                    }]
-                },
-                options: { plugins: { legend: { position: 'bottom', labels: { padding: 20 } } } }
-            });
+            
+            // Only draw chart if there is data
+            if (Object.keys(data.breakdown).length > 0) {
+                chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(data.breakdown),
+                        datasets: [{
+                            data: Object.values(data.breakdown),
+                            backgroundColor: ['#0d6efd', '#ffc107', '#198754', '#dc3545']
+                        }]
+                    },
+                    options: { plugins: { legend: { position: 'bottom' } } }
+                });
+            }
         }
-        updateUI();
+
+        window.onload = updateUI;
     </script>
 </body>
 </html>

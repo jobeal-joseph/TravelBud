@@ -15,9 +15,11 @@ CORS(app)
 
 db.init_app(app)
 with app.app_context():
-    from models.expense import Expense 
+    # Import models here so SQLAlchemy creates the tables
+    from models.expense import Trip, Expense
     db.create_all()
 
+# Blueprint Registration
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(search_bp)
 app.register_blueprint(budget_bp)
