@@ -1,0 +1,49 @@
+<h2>{{ trip.title }}</h2>
+
+<input id="cityName" placeholder="City name">
+<button onclick="addCity()">Add City</button>
+
+{% for city in trip.cities %}
+<div>
+  <h4>{{ city.name }}</h4>
+  <button onclick="moveUp({{ city.id }})">↑</button>
+  <button onclick="moveDown({{ city.id }})">↓</button>
+
+  <ul>
+    {% for act in city.activities %}
+      <li>{{ act.name }}</li>
+    {% endfor %}
+  </ul>
+
+  <input id="act{{ city.id }}" placeholder="Activity">
+  <button onclick="addActivity({{ city.id }})">Add Activity</button>
+</div>
+{% endfor %}
+
+<script>
+function addCity() {
+  fetch(`/api/trips/{{ trip.id }}/cities`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({name: cityName.value})
+  }).then(() => location.reload());
+}
+
+function addActivity(cityId) {
+  fetch(`/api/cities/${cityId}/activities`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({name: document.getElementById("act"+cityId).value})
+  }).then(() => location.reload());
+}
+
+function moveUp(id) {
+  fetch(`/api/cities/${id}/move-up`, {method: "POST"})
+    .then(() => location.reload());
+}
+
+function moveDown(id) {
+  fetch(`/api/cities/${id}/move-down`, {method: "POST"})
+    .then(() => location.reload());
+}
+</script>
