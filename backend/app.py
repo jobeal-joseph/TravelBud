@@ -1,16 +1,28 @@
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, url_for
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+from extensions import db
+from routes.auth_routes import auth_bp
 
-app = Flask(__name__, template_folder='../frontend/templates')
+
+
+app = Flask(__name__, template_folder='../frontend/templates', static_folder='../frontend/static')
 app.config.from_object('config.Config')
 
 CORS(app)
-db = SQLAlchemy(app)
 
+db.init_app(app)
+with app.app_context():
+    db.create_all()
+app.register_blueprint(auth_bp , url_prefix='/auth')
+
+print(app.url_map)
 @app.route('/')
-def home():
-    return render_template('login.html')
+def index():
+    return redirect(url_for('auth.login'))
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
