@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Welcome back</h2>
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <h4>Your Trips</h4>
+  <a href="/create-trip" class="btn btn-primary">Plan New Trip</a>
+</div>
+<div id="trips" class="row mt-3"></div>
+<script src="/static/js/ui.js"></script>
+{% endblock %}
