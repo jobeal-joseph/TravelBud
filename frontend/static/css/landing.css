@@ -58,6 +58,13 @@
   }
   
   /* SECTIONS */
+  .section-nav-bar {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+
+  }
+
   .section {
     padding: 30px;
   }
