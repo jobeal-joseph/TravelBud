@@ -24,10 +24,7 @@
     font-weight: bold;
   }
   
-  .search-bar input {
-    padding: 8px 12px;
-    width: 250px;
-  }
+ 
   
   .nav-actions button {
     margin-left: 10px;
@@ -59,11 +56,35 @@
   
   /* SECTIONS */
   .section-nav-bar {
-    margin-bottom: 20px;
-    display: flex;
-    gap: 20px;
+  display: flex;
+  justify-content: space-between; /* Pushes search to the left and buttons to the right */
+  align-items: center;            /* Vertically centers everything */
+  padding: 10px 20px;
+  background: #f7f7f7;      /* Optional: subtle background */
+}
 
-  }
+.search-bar {
+  flex: 1;                        /* Allows the search bar to grow and fill available space */
+  max-width: 100%;               /* Keeps the search bar from getting too wide */
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.nav-actions {
+  display: flex;                  /* Makes the buttons inside sit in a row too */
+  gap: 10px;                      /* Adds space between the buttons */
+  margin-left: 20px;
+}
+
+.nav-actions button {
+  padding: 8px 15px;
+  cursor: pointer;
+}
 
   .section {
     padding: 30px;

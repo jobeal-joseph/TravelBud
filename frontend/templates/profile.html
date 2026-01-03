@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - GlobalTrotter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+<body>
+    <div class="profile-wrapper">
+        <header class="section-header-title">
+            <h1>GlobalTrotter Profile</h1>
+        </header>
+
+        <section class="user-info-section">
+            <div class="avatar-container">
+                <img id="userImage" src="{{ url_for('static', filename='images/default-user.png') }}" alt="User">
+            </div>
+
+            <div class="info-sub-card" id="displayMode">
+                <h3>User Information</h3>
+                <p><strong>Name:</strong> <span id="displayName">Mugesh</span></p>
+                <p><strong>Bio:</strong> <span id="displayBio">Adventure enthusiast.</span></p>
+                <button class="btn-blue" onclick="toggleEdit()">Edit Profile</button>
+            </div>
+
+            <div class="info-sub-card" id="editMode" style="display: none;">
+                <h3>Update Profile</h3>
+                <div class="form-group">
+                    <input type="text" id="editName" class="form-input" placeholder="Enter Name">
+                    <textarea id="editBio" class="form-input" rows="3" placeholder="Enter Bio"></textarea>
+                </div>
+                <div class="button-row">
+                    <button class="btn-blue" onclick="saveProfile()">Save Changes</button>
+                    <button class="btn-blue" style="background-color: #666;" onclick="toggleEdit()">Cancel</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="trip-container">
+            <header class="section-header">
+                <h2>Preplanned Trips</h2>
+            </header>
+            <div class="trip-grid" id="preplannedGrid">
+                <div class="trip-card">
+                    <div class="trip-img-placeholder"></div>
+                    <button class="btn-blue view-btn">View</button>
+                </div>
+                <div class="trip-card">
+                    <div class="trip-img-placeholder"></div>
+                    <button class="btn-blue view-btn">View</button>
+                </div>
+                <div class="trip-card">
+                    <div class="trip-img-placeholder"></div>
+                    <button class="btn-blue view-btn">View</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="trip-container">
+            <header class="section-header">
+                <h2>Previous Trips</h2>
+            </header>
+            <div class="trip-grid" id="previousGrid">
+                <div class="trip-card">
+                    <div class="trip-img-placeholder"></div>
+                    <button class="btn-blue view-btn">View</button>
+                </div>
+                <div class="trip-card">
+                    <div class="trip-img-placeholder"></div>
+                    <button class="btn-blue view-btn">View</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="save-container">
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">Ensure all changes are saved before leaving.</p>
+            <button class="btn-blue" id="finalSave" onclick="saveProfile()">Save All Changes</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>

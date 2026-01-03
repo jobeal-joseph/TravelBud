@@ -1,0 +1,133 @@
+:root {
+    --primary-blue: #4285f4;
+    --bg-light: #f8f9fa;
+    --border-color: #e0e0e0;
+    --text-dark: #333;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Main Outer Container */
+.profile-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* Section Titles */
+.section-header-title {
+    padding: 15px 25px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* User Info Layout */
+.user-info-section {
+    display: flex;
+    padding: 30px;
+    gap: 20px;
+    background: #fff;
+}
+
+/* Circular Avatar with Blue Ring */
+.avatar-container {
+    flex: 0 0 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.avatar-container img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Sub-Cards for Info */
+.info-sub-card {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.info-sub-card h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+/* Trip Grid Styling */
+.trip-container {
+    padding: 25px;
+    background: #fdfdfd;
+    border-top: 1px solid var(--border-color);
+}
+
+.trip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.trip-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.trip-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Placeholder for Trip Images */
+.trip-img-placeholder {
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(180deg, #eee 0%, #ddd 100%);
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Buttons (Matching the Blue in image) */
+.btn-blue {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-blue:hover {
+    opacity: 0.9;
+}
+
+.save-container {
+    text-align: center;
+    padding: 30px;
+}
