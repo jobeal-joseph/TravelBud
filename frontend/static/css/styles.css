@@ -17,11 +17,12 @@ body {
 }
 
 input {
-    width: 100%;
+    width: 92.5%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin-right: 40%;
 }
 
 button {
