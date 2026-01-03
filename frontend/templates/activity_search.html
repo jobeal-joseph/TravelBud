@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/activity_search.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="wireframe-container">
+
+    <!-- Header -->
+    <div class="top-bar attached">
+        <span class="brand">GlobalTrotter</span>
+        <span class="profile-circle"></span>
+    </div>
+
+    <!-- Body -->
+    <div class="container-body">
+
+        <!-- Search Controls -->
+        <div class="search-controls">
+
+
+
+            <input type="text" class="search-input" placeholder="Search activity or city...">
+
+            <div class="control-buttons">
+                <button>Group by</button>
+                <button>Filter</button>
+                <button>Sort by...</button>
+            </div>
+
+        </div>
+
+        <!-- Results -->
+        <h6 class="section-title">Results</h6>
+
+        <div class="results-list">
+            <div class="result-card">Option and its details</div>
+            <div class="result-card">Option and its details</div>
+            <div class="result-card">Option and its details</div>
+            <div class="result-card">Option and its details</div>
+            <div class="result-card">Option and its details</div>
+            <div class="result-card">Option and its details</div>
+            <div class="result-card">Option and its details</div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

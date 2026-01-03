@@ -30,6 +30,10 @@ def dashboard():
 def profile():
     return render_template('profile.html')
 
+@app.route('/create_trip')
+def create_trip():
+    return render_template('create_trip.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
 
