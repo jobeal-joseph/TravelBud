@@ -1,10 +1,61 @@
-{% extends "base.html" %}
-{% block content %}
-<h2>Welcome back</h2>
-<div class="d-flex justify-content-between align-items-center mt-3">
-  <h4>Your Trips</h4>
-  <a href="/create-trip" class="btn btn-primary">Plan New Trip</a>
-</div>
-<div id="trips" class="row mt-3"></div>
-<script src="/static/js/ui.js"></script>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Main Landing | Travel Planner</title>
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+
+
+<header class="navbar">
+  <div class="logo">GlobeTrotter</div>
+
+  <div class="search-bar">
+    <input type="text" placeholder="Search destinations..." />
+  </div>
+
+  <div class="nav-actions">
+    <button>Group By</button>
+    <button>Filter</button>
+    <button>Sort</button>
+  </div>
+</header>
+
+
+<section class="hero">
+  <img src="assets/banner.jpg" alt="Travel Banner" />
+  <div class="hero-text">
+    <h1>Plan Your Next Adventure</h1>
+    <p>Discover destinations, activities & itineraries</p>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Top Regional Selections</h2>
+  <div class="card-grid">
+    <div class="card">Asia</div>
+    <div class="card">Europe</div>
+    <div class="card">America</div>
+    <div class="card">Africa</div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Previous Trips</h2>
+  <div class="card-grid">
+    <div class="trip-card">Paris Trip</div>
+    <div class="trip-card">Goa Trip</div>
+    <div class="trip-card">NYC Trip</div>
+  </div>
+</section>
+
+
+<section class="cta">
+  <button id="planTripBtn">+ Plan a Trip</button>
+</section>
+
+<script src="landing.js"></script>
+</body>
+</html>
