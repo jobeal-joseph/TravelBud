@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Manager - TravelBud</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-card { border-radius: 12px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .bg-gradient-primary { background: linear-gradient(45deg, #0d6efd, #00d4ff); color: white; }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">Trip Financial Dashboard</h2>
+            <p class="text-muted">Manage expenses and track your travel budget.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card dashboard-card p-4">
+                <h5 class="fw-bold mb-3">Add New Expense</h5>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">CATEGORY</label>
+                    <select id="category" class="form-select border-0 bg-light">
+                        <option>Accommodation</option>
+                        <option>Transport</option>
+                        <option>Food & Dining</option>
+                        <option>Activities</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">DESCRIPTION</label>
+                    <input type="text" id="description" class="form-control border-0 bg-light" placeholder="e.g. Hotel stay">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">AMOUNT ($)</label>
+                    <input type="number" id="amount" class="form-control border-0 bg-light" placeholder="0.00">
+                </div>
+                <button class="btn btn-primary w-100 fw-bold py-2" onclick="submitExpense()">Add Expense</button>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card dashboard-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold m-0">Spending Breakdown</h5>
+                    <div class="badge bg-primary fs-5">Total: $<span id="total-val">0</span></div>
+                </div>
+                <div style="max-height: 350px;">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let myChart;
+
+    async function submitExpense() {
+        const payload = {
+            category: document.getElementById('category').value,
+            description: document.getElementById('description').value,
+            amount: document.getElementById('amount').value
+        };
+
+        const res = await fetch('/api/budget/add', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
+        if(res.ok) {
+            document.getElementById('description').value = '';
+            document.getElementById('amount').value = '';
+            loadData();
+        }
+    }
+
+    async function loadData() {
+        const res = await fetch('/api/budget/summary');
+        const data = await res.json();
+        
+        document.getElementById('total-val').innerText = data.total;
+
+        const ctx = document.getElementById('budgetChart').getContext('2d');
+        if (myChart) myChart.destroy();
+        
+        myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(data.breakdown),
+                datasets: [{
+                    data: Object.values(data.breakdown),
+                    backgroundColor: ['#0d6efd', '#ffc107', '#198754', '#dc3545'],
+                    hoverOffset: 4
+                }]
+            },
+            options: { plugins: { legend: { position: 'bottom' } } }
+        });
+    }
+
+    window.onload = loadData;
+</script>
+</body>
+</html>

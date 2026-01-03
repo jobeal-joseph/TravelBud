@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Cities - Globe Trotter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .city-card { cursor: pointer; transition: 0.3s; }
+        .city-card:hover { background-color: #f8f9fa; }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary mb-4">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">TravelBud</span>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="text-center mb-4">
+                    <h2>Explore Global Destinations</h2>
+                    <p class="text-muted">Find cities to add to your itinerary</p>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <div class="input-group mb-3">
+                            <input type="text" id="city-search" class="form-control form-control-lg" placeholder="Search for a city...">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                        </div>
+
+                        <div id="status-msg" class="text-center my-3 d-none">
+                            <div class="spinner-border text-primary" role="status"></div>
+                        </div>
+
+                        <ul id="city-results" class="list-group list-group-flush mt-3"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='search.js') }}"></script>
+</body>
+</html>
