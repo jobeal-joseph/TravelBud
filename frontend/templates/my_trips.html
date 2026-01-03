@@ -1,0 +1,14 @@
+<h2>My Trips</h2>
+{% for trip in trips %}
+  <div>
+    <a href="/trips/{{ trip.id }}">{{ trip.title }}</a>
+    <button onclick="deleteTrip({{ trip.id }})">Delete</button>
+  </div>
+{% endfor %}
+
+<script>
+function deleteTrip(id) {
+  fetch(`/api/trips/${id}`, { method: 'DELETE' })
+    .then(() => location.reload());
+}
+</script>
